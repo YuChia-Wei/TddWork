@@ -15,6 +15,11 @@ namespace TddWork
 
         public decimal Query(DateTime startDateTime, DateTime endDateTime)
         {
+            if (IsQueryDateInvalid(startDateTime, endDateTime))
+            {
+                return 0;
+            }
+
             if (startDateTime.ToString("yyyyMM") == endDateTime.ToString("yyyyMM"))
             {
                 return this.GetSameMonthAmount(startDateTime, endDateTime);
@@ -29,6 +34,11 @@ namespace TddWork
             var midAmount = GetMidAmount(startDateTime, endDateTime, budgets);
 
             return startBudgetAmount + endBudgetAmount + midAmount;
+        }
+
+        private static bool IsQueryDateInvalid(DateTime startDateTime, DateTime endDateTime)
+        {
+            return endDateTime.Date < startDateTime.Date;
         }
 
         private static int GetDaysInMonth(DateTime dateTime)

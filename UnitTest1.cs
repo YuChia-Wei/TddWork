@@ -34,6 +34,24 @@ namespace TddWork
         }
 
         [TestMethod]
+        public void QueryDateRangeInvalid()
+        {
+            var budgetList = new List<Budget>();
+            budgetList.Add(new Budget { YearMonth = "202012", Amount = 31 });
+            budgetList.Add(new Budget { YearMonth = "202111", Amount = 60 });
+            budgetList.Add(new Budget { YearMonth = "202211", Amount = 90 });
+
+            this._budgetRepo.GetAll()
+                .Returns(budgetList);
+
+            this.GivenEndDate(2020, 12, 31);
+            this.GivenStartDate(2022, 11, 1);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(0, result);
+        }
+
+        [TestMethod]
         public void Query查一月一號_2Daily()
         {
             this.GivenOneMonthBudget("202101", 31);
