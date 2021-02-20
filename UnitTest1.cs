@@ -8,10 +8,10 @@ namespace TddWork
     [TestClass]
     public class UnitTest1
     {
-        private IBudgetRepo _budgetRepo;
         private BudgetCalculator _budget;
-        private DateTime _startDateTime;
+        private IBudgetRepo _budgetRepo;
         private DateTime _endDateTime;
+        private DateTime _startDateTime;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,6 +30,19 @@ namespace TddWork
             var result = this._budget.Query(this._startDateTime, this._endDateTime);
 
             Assert.AreEqual(2, result);
+        }
+
+        [TestMethod]
+        public void Query_()
+        {
+            this._budgetRepo.GetAll()
+                .Returns(new List<Budget> {new Budget {YearMonth = "202102", Amount = 56}});
+
+            this.GivenStartDate(2021, 02, 1);
+            this.GivenEndDate(2021, 02, 02);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(4, result);
         }
 
         [TestMethod]
@@ -60,9 +73,9 @@ namespace TddWork
         public void Query查跨3個月()
         {
             var budgetList = new List<Budget>();
-            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
-            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
-            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
+            budgetList.Add(new Budget {YearMonth = "202102", Amount = 56});
+            budgetList.Add(new Budget {YearMonth = "202103", Amount = 31});
+            budgetList.Add(new Budget {YearMonth = "202104", Amount = 90});
 
             this._budgetRepo.GetAll()
                 .Returns(budgetList);
@@ -78,10 +91,10 @@ namespace TddWork
         public void Query查跨4個月()
         {
             var budgetList = new List<Budget>();
-            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
-            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
-            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
-            budgetList.Add(new Budget() { YearMonth = "202105", Amount = 124 });
+            budgetList.Add(new Budget {YearMonth = "202102", Amount = 56});
+            budgetList.Add(new Budget {YearMonth = "202103", Amount = 31});
+            budgetList.Add(new Budget {YearMonth = "202104", Amount = 90});
+            budgetList.Add(new Budget {YearMonth = "202105", Amount = 124});
 
             this._budgetRepo.GetAll()
                 .Returns(budgetList);
@@ -97,8 +110,8 @@ namespace TddWork
         public void Query查跨年()
         {
             var budgetList = new List<Budget>();
-            budgetList.Add(new Budget() { YearMonth = "202012", Amount = 31 });
-            budgetList.Add(new Budget() { YearMonth = "202112", Amount = 62 });
+            budgetList.Add(new Budget {YearMonth = "202012", Amount = 31});
+            budgetList.Add(new Budget {YearMonth = "202112", Amount = 62});
 
             this._budgetRepo.GetAll()
                 .Returns(budgetList);
@@ -114,8 +127,8 @@ namespace TddWork
         public void Query查跨月()
         {
             var budgetList = new List<Budget>();
-            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
-            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
+            budgetList.Add(new Budget {YearMonth = "202102", Amount = 56});
+            budgetList.Add(new Budget {YearMonth = "202103", Amount = 31});
 
             this._budgetRepo.GetAll()
                 .Returns(budgetList);
@@ -147,7 +160,7 @@ namespace TddWork
         private void GivenOneMonthBudget(string yearMonth, int amount)
         {
             this._budgetRepo.GetAll()
-                .Returns(new List<Budget>() { new Budget() { YearMonth = yearMonth, Amount = amount } });
+                .Returns(new List<Budget> {new Budget {YearMonth = yearMonth, Amount = amount}});
         }
 
         private void GivenStartDate(int year, int month, int day)
