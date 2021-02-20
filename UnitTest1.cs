@@ -10,6 +10,8 @@ namespace TddWork
     {
         private IBudgetRepo _budgetRepo;
         private BudgetCalculator _budget;
+        private DateTime _startDateTime;
+        private DateTime _endDateTime;
 
         [TestInitialize]
         public void TestInitialize()
@@ -19,16 +21,55 @@ namespace TddWork
         }
 
         [TestMethod]
-        public void QueryDaily()
+        public void Query查一月一號_2Daily()
         {
-            this._budgetRepo.GetAll()
-                .Returns(new List<Budget>() { new Budget() { YearMonth = "202101", Amount = 31 } });
+            this.GivenOneMonthBudget("202101", 31);
 
-            var startDateTime = new DateTime(2021, 01, 01);
-            var endDateTime = new DateTime(2021, 01, 01);
-            var result = this._budget.Query(startDateTime, endDateTime);
+            this.GivenStartDate(2021, 01, 1);
+            this.GivenEndDate(2021, 01, 02);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(2, result);
+        }
+
+        [TestMethod]
+        public void Query查一月一號_Daily()
+        {
+            this.GivenOneMonthBudget("202101", 31);
+
+            this.GivenStartDate(2021, 01, 1);
+            this.GivenEndDate(2021, 01, 01);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
 
             Assert.AreEqual(1, result);
+        }
+
+        [TestMethod]
+        public void Query查一月一號_資料只有二月_ResultIs_0()
+        {
+            this.GivenOneMonthBudget("202102", 28);
+
+            this.GivenStartDate(2021, 01, 1);
+            this.GivenEndDate(2021, 01, 02);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(0, result);
+        }
+
+        private void GivenEndDate(int year, int month, int day)
+        {
+            this._endDateTime = new DateTime(year, month, day);
+        }
+
+        private void GivenOneMonthBudget(string yearMonth, int amount)
+        {
+            this._budgetRepo.GetAll()
+                .Returns(new List<Budget>() { new Budget() { YearMonth = yearMonth, Amount = amount } });
+        }
+
+        private void GivenStartDate(int year, int month, int day)
+        {
+            this._startDateTime = new DateTime(year, month, day);
         }
     }
 }
