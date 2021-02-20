@@ -48,14 +48,18 @@ namespace TddWork
             DateTime endDateTime,
             IReadOnlyCollection<Budget> budgets)
         {
-            var start = startDateTime.AddMonths(1);
-            //var end = queryDateTime.AddMonths(-1);
-
             decimal midAmount = 0;
-            for (var i = start; i.Month < endDateTime.Month; i = i.AddMonths(1))
+
+            var end = endDateTime.ToString("yyyyMM");
+
+            var currentMonth = startDateTime.AddMonths(1);
+
+            while (currentMonth.ToString("yyyyMM").CompareTo(end) < 0)
             {
-                var budget = budgets.FirstOrDefault(o => o.YearMonth == i.ToString("yyyyMM"));
+                var startPeriodString = currentMonth.ToString("yyyyMM");
+                var budget = budgets.FirstOrDefault(o => o.YearMonth == startPeriodString);
                 midAmount += budget?.Amount ?? 0;
+                currentMonth = currentMonth.AddMonths(1);
             }
 
             return midAmount;
