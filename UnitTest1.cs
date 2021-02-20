@@ -94,6 +94,23 @@ namespace TddWork
         }
 
         [TestMethod]
+        public void Query查跨年()
+        {
+            var budgetList = new List<Budget>();
+            budgetList.Add(new Budget() { YearMonth = "202012", Amount = 31 });
+            budgetList.Add(new Budget() { YearMonth = "202112", Amount = 62 });
+
+            this._budgetRepo.GetAll()
+                .Returns(budgetList);
+
+            this.GivenStartDate(2020, 12, 31);
+            this.GivenEndDate(2021, 12, 31);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(63, result);
+        }
+
+        [TestMethod]
         public void Query查跨月()
         {
             var budgetList = new List<Budget>();

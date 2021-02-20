@@ -14,7 +14,7 @@ namespace TddWork
 
         public decimal Query(DateTime startDateTime, DateTime endDateTime)
         {
-            if (startDateTime.Month == endDateTime.Month)
+            if (startDateTime.ToString("yyyyMM") == endDateTime.ToString("yyyyMM"))
             {
                 return this.GetSameMonthAmount(startDateTime, endDateTime);
             }
@@ -44,10 +44,10 @@ namespace TddWork
             var orderedEnumerable = budgets.OrderBy(o => o.YearMonth);
 
             decimal midAmount = 0;
-            for (var i = start; i.Date < endDateTime.Date; i = i.AddMonths(1))
+            for (var i = start; i.Month < endDateTime.Month; i = i.AddMonths(1))
             {
                 var budget = budgets.FirstOrDefault(o => o.YearMonth == i.ToString("yyyyMM"));
-                midAmount += budget.Amount;
+                midAmount += budget?.Amount ?? 0;
             }
 
             return startBudgetAmount + endBudgetAmount + midAmount;
