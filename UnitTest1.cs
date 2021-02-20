@@ -15,7 +15,7 @@ namespace TddWork
         public void TestInitialize()
         {
             this._budgetRepo = Substitute.For<IBudgetRepo>();
-            this._budget = new BudgetCalculator();
+            this._budget = new BudgetCalculator(this._budgetRepo);
         }
 
         [TestMethod]
@@ -30,24 +30,5 @@ namespace TddWork
 
             Assert.AreEqual(31, result);
         }
-    }
-
-    public class Budget
-    {
-        public int Amount { get; set; }
-        public string YearMonth { get; set; }
-    }
-
-    public class BudgetCalculator
-    {
-        public decimal Query(DateTime startDateTime, DateTime endDateTime)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public interface IBudgetRepo
-    {
-        List<Budget> GetAll();
     }
 }
