@@ -57,23 +57,47 @@ namespace TddWork
         }
 
         [TestMethod]
-        public void Query查整個月份()
+        public void Query查跨3個月()
         {
-            this.GivenOneMonthBudget("202104", 30);
+            var budgetList = new List<Budget>();
+            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
+            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
+            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
 
-            this.GivenStartDate(2021, 04, 1);
-            this.GivenEndDate(2021, 04, 30);
+            this._budgetRepo.GetAll()
+                .Returns(budgetList);
+
+            this.GivenStartDate(2021, 02, 27);
+            this.GivenEndDate(2021, 04, 3);
             var result = this._budget.Query(this._startDateTime, this._endDateTime);
 
-            Assert.AreEqual(30, result);
+            Assert.AreEqual(4 + 31 + 9, result);
+        }
+
+        [TestMethod]
+        public void Query查跨4個月()
+        {
+            var budgetList = new List<Budget>();
+            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
+            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
+            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
+            budgetList.Add(new Budget() { YearMonth = "202105", Amount = 124 });
+
+            this._budgetRepo.GetAll()
+                .Returns(budgetList);
+
+            this.GivenStartDate(2021, 02, 27);
+            this.GivenEndDate(2021, 05, 3);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(4 + 31 + 90 + 12, result);
         }
 
         [TestMethod]
         public void Query查跨月()
         {
-
             var budgetList = new List<Budget>();
-            budgetList.Add(new Budget(){YearMonth = "202102", Amount = 56});
+            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
             budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
 
             this._budgetRepo.GetAll()
@@ -87,23 +111,15 @@ namespace TddWork
         }
 
         [TestMethod]
-        public void Query查跨3個月()
+        public void Query查整個月份()
         {
+            this.GivenOneMonthBudget("202104", 30);
 
-            var budgetList = new List<Budget>();
-            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
-            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
-            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
-
-
-            this._budgetRepo.GetAll()
-                .Returns(budgetList);
-
-            this.GivenStartDate(2021, 02, 27);
-            this.GivenEndDate(2021, 04, 3);
+            this.GivenStartDate(2021, 04, 1);
+            this.GivenEndDate(2021, 04, 30);
             var result = this._budget.Query(this._startDateTime, this._endDateTime);
 
-            Assert.AreEqual(4+31+9, result);
+            Assert.AreEqual(30, result);
         }
 
         private void GivenEndDate(int year, int month, int day)
