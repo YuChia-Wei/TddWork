@@ -20,6 +20,7 @@ namespace TddWork
             }
 
             var budgets = this._budgetRepo.GetAll();
+
             var startBudget = budgets.FirstOrDefault(o => o.YearMonth == startDateTime.ToString("yyyyMM"));
             var endBudget = budgets.LastOrDefault(o => o.YearMonth == endDateTime.ToString("yyyyMM"));
 
@@ -37,7 +38,19 @@ namespace TddWork
 
             var endBudgetAmount = endAmount * endDateTime.Day;
 
-            return startBudgetAmount + endBudgetAmount;
+            var start = startDateTime.AddMonths(1);
+            //var end = endDateTime.AddMonths(-1);
+
+            var orderedEnumerable = budgets.OrderBy(o => o.YearMonth);
+
+            decimal midAmount = 0;
+            for (var i = start; i.Date < endDateTime.Date; i = i.AddMonths(1))
+            {
+                var budget = budgets.FirstOrDefault(o => o.YearMonth == i.ToString("yyyyMM"));
+                midAmount += budget.Amount;
+            }
+
+            return startBudgetAmount + endBudgetAmount + midAmount;
         }
 
         private decimal GetSameMonthAmount(DateTime startDateTime, DateTime endDateTime)

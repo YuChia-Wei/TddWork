@@ -86,6 +86,26 @@ namespace TddWork
             Assert.AreEqual(7, result);
         }
 
+        [TestMethod]
+        public void Query¬d¸ó3­Ó¤ë()
+        {
+
+            var budgetList = new List<Budget>();
+            budgetList.Add(new Budget() { YearMonth = "202102", Amount = 56 });
+            budgetList.Add(new Budget() { YearMonth = "202103", Amount = 31 });
+            budgetList.Add(new Budget() { YearMonth = "202104", Amount = 90 });
+
+
+            this._budgetRepo.GetAll()
+                .Returns(budgetList);
+
+            this.GivenStartDate(2021, 02, 27);
+            this.GivenEndDate(2021, 04, 3);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(4+31+9, result);
+        }
+
         private void GivenEndDate(int year, int month, int day)
         {
             this._endDateTime = new DateTime(year, month, day);
