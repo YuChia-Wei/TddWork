@@ -36,14 +36,17 @@ namespace TddWork
             return DateTime.DaysInMonth(dateTime.Year, dateTime.Month);
         }
 
-        private static int GetEndBudgetAmount(DateTime endDateTime, List<Budget> budgets)
+        private static int GetEndBudgetAmount(DateTime endDateTime, IEnumerable<Budget> budgets)
         {
             var endBudget = budgets.LastOrDefault(o => o.YearMonth == endDateTime.ToString("yyyyMM"))?.Amount ?? 0;
             var daysInEndMonth = GetDaysInMonth(endDateTime);
             return endBudget / daysInEndMonth * endDateTime.Day;
         }
 
-        private static decimal GetMidAmount(DateTime startDateTime, DateTime endDateTime, List<Budget> budgets)
+        private static decimal GetMidAmount(
+            DateTime startDateTime,
+            DateTime endDateTime,
+            IReadOnlyCollection<Budget> budgets)
         {
             var start = startDateTime.AddMonths(1);
             //var end = queryDateTime.AddMonths(-1);
@@ -74,7 +77,7 @@ namespace TddWork
             return budgetAmount * date;
         }
 
-        private static int GetStartBudgetAmount(DateTime startDateTime, List<Budget> budgets)
+        private static int GetStartBudgetAmount(DateTime startDateTime, IEnumerable<Budget> budgets)
         {
             var startBudget = budgets.FirstOrDefault(o => o.YearMonth == startDateTime.ToString("yyyyMM"))?.Amount ?? 0;
             var daysInFirstMonth = GetDaysInMonth(startDateTime);
