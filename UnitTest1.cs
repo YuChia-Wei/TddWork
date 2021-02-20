@@ -56,6 +56,18 @@ namespace TddWork
             Assert.AreEqual(0, result);
         }
 
+        [TestMethod]
+        public void Query查整個月份()
+        {
+            this.GivenOneMonthBudget("202104", 30);
+
+            this.GivenStartDate(2021, 04, 1);
+            this.GivenEndDate(2021, 04, 30);
+            var result = this._budget.Query(this._startDateTime, this._endDateTime);
+
+            Assert.AreEqual(30, result);
+        }
+
         private void GivenEndDate(int year, int month, int day)
         {
             this._endDateTime = new DateTime(year, month, day);

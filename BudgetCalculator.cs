@@ -21,7 +21,7 @@ namespace TddWork
                 return 0;
             }
 
-            var budgetAmount = budget.Amount / 31;
+            var budgetAmount = budget.Amount / DateTime.DaysInMonth(startDateTime.Year, startDateTime.Month);
             var date = (endDateTime.Date - startDateTime.Date).Days + 1;
 
             return budgetAmount * date;
