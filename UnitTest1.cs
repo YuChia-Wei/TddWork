@@ -28,7 +28,7 @@ namespace TddWork
             var endDateTime = new DateTime(2021, 01, 01);
             var result = this._budget.Query(startDateTime, endDateTime);
 
-            Assert.AreEqual(31, result);
+            Assert.AreEqual(1, result);
         }
     }
 }

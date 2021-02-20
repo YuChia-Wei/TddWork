@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace TddWork
 {
@@ -9,12 +10,16 @@ namespace TddWork
         public BudgetCalculator(IBudgetRepo budgetRepo)
         {
             this._budgetRepo = budgetRepo;
-            throw new NotImplementedException();
         }
 
         public decimal Query(DateTime startDateTime, DateTime endDateTime)
         {
-            throw new NotImplementedException();
+            var budgets = this._budgetRepo.GetAll();
+            var budget = budgets.First(o => o.YearMonth == startDateTime.ToString("yyyyMM"));
+            var budgetAmount = budget.Amount / 31;
+            var date = (endDateTime.Date - startDateTime.Date).Days + 1;
+
+            return budgetAmount * date;
         }
     }
 }
