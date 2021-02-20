@@ -19,24 +19,25 @@ namespace TddWork
                 return this.GetSameMonthAmount(startDateTime, endDateTime);
             }
 
-            return 0;
+            var budgets = this._budgetRepo.GetAll();
+            var startBudget = budgets.FirstOrDefault(o => o.YearMonth == startDateTime.ToString("yyyyMM"));
+            var endBudget = budgets.LastOrDefault(o => o.YearMonth == endDateTime.ToString("yyyyMM"));
 
-            //var budgets = this._budgetRepo.GetAll();
-            //var startBudget = budgets.FirstOrDefault(o => o.YearMonth == startDateTime.ToString("yyyyMM"));
-            //var endBudget = budgets.LastOrDefault(o => o.YearMonth == endDateTime.ToString("yyyyMM"));
+            if (startBudget == null)
+            {
+                return 0;
+            }
 
-            //if (startBudget == null)
-            //{
-            //    return 0;
-            //}
+            var startAmount = startBudget.Amount / DateTime.DaysInMonth(startDateTime.Year, startDateTime.Month);
+            var endAmount = endBudget.Amount / DateTime.DaysInMonth(endDateTime.Year, endDateTime.Month);
 
-            //var startAmount = startBudget.Amount / DateTime.DaysInMonth(startDateTime.Year, startDateTime.Month);
-            //var endAmount = endBudget.Amount / DateTime.DaysInMonth(endDateTime.Year, endDateTime.Month);
+            var startBudgetAmount = startAmount *
+                                    (DateTime.DaysInMonth(startDateTime.Year, startDateTime.Month) - startDateTime.Day +
+                                     1);
 
-            //var startBudgetAmount = startAmount * startDateTime.d
-            //var startDate = (endDateTime.Date - startDateTime.Date).Days + 1;
+            var endBudgetAmount = endAmount * endDateTime.Day;
 
-            //return budgetAmount * date;
+            return startBudgetAmount + endBudgetAmount;
         }
 
         private decimal GetSameMonthAmount(DateTime startDateTime, DateTime endDateTime)
